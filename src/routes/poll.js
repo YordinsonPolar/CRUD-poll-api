@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Poll = require('../model/poll.js');
 const { findPoll } = require('../middleware/findUser.js');
+const { isAuth } = require('../middleware/auth.js');
 
 router.get('/', async (req, res) => {
 	try {
@@ -9,7 +10,7 @@ router.get('/', async (req, res) => {
 	} catch(err) { res.status(500).json({ message: err.message }) }
 })
 
-router.patch('/:id', findPoll, async (req, res) => {
+router.patch('/:id', isAuth, findPoll, async (req, res) => {
 	let poll = req.body;
 	for( data in poll ) { if (poll[data]) res.poll[data] = poll[data]; }
 
@@ -19,7 +20,7 @@ router.patch('/:id', findPoll, async (req, res) => {
 	} catch (err) { return res.status(400).json({ message: err }) }
 })
 
-router.post('/add', async (req, res) => {
+router.post('/add', isAuth, async (req, res) => {
 	try {
 		const newPoll = new Poll({ ...req.body, votesA: 0, votesB: 0, createdBy: req.user.username});
 		const savePoll = await newPoll.save();
@@ -29,7 +30,7 @@ router.post('/add', async (req, res) => {
 	}
 })
 
-router.delete('/:id', findPoll, async (req, res) => {
+router.delete('/:id', isAuth, findPoll, async (req, res) => {
 	try {
 		await res.poll.remove();
 		return res.json({ message: 'Deleted poll'})

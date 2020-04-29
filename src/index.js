@@ -14,7 +14,7 @@ app.use(cookieParser());
 
 //routes
 app.use('/', require('./routes/user'))
-app.use('/polls', isAuth, require('./routes/poll'))
+app.use('/polls', require('./routes/poll'))
 app.post('/polls/refreshAccessToken', isAuth, refreshAccessToken);
 
 
