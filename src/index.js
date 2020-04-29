@@ -6,12 +6,12 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
 const { refreshAccessToken } = require('./middleware/auth.js');
-const  { isAuth } = require('./middleware/auth.js');
+const { isAuth } = require('./middleware/auth.js');
 
 // Config
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser()); 
 app.use(cors());
 
 //routes
