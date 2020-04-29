@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv').config();
 const db = require('./dataBase.js');
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
 const { refreshAccessToken } = require('./middleware/auth.js');
@@ -11,6 +12,7 @@ const  { isAuth } = require('./middleware/auth.js');
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 
 //routes
 app.use('/', require('./routes/user'))
