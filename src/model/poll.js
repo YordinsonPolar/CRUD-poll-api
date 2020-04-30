@@ -7,8 +7,8 @@ const pollSchema = new mongoose.Schema({
 	votesA: { type: Number, default: 0, required: true },
 	votesB: { type: Number, default: 0, required: true },
 	createdBy: { type: String, required: true },
-	createdAt: { type: Date, default: Date.now() },
-});
+	userVotes: { type: [],default: []},
+}, { timestamps: true });
 
 const Poll = mongoose.model('Poll', pollSchema);
 

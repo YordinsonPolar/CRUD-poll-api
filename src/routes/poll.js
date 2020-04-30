@@ -30,6 +30,18 @@ router.post('/add', isAuth, async (req, res) => {
 	}
 })
 
+router.patch('/vote/:id',isAuth, findPoll, async (req, res) => {
+	
+	console.log(res.username);
+	try {
+		const userVote = res.poll.userVotes.find(vote => vote.id === req.params.id );
+		if (!userVotes) {
+			res.poll.userVotes.push({ id: req.params.id })
+		}
+	}catch (err) { res.status(500).json({ message: err.message })};
+	
+})
+
 router.delete('/:id', isAuth, findPoll, async (req, res) => {
 	try {
 		await res.poll.remove();
