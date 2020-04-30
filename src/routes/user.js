@@ -32,10 +32,14 @@ router.post('/user/register', async (req,res) => {
 	} catch(err) { return res.status(500).json(err); }
 })
 
-router.delete('/user/:id', findUser, async (req, res) => {
+router.delete('/user/:id', findUser, isAuth, async (req, res) => {
 	try {
-		await res.user.remove();
-		return res.json({ message: 'Deleted user'})
+		if (res.tokenUser.username === res.user.username) {
+			await res.user.remove();
+			return res.json({ message: 'Deleted user'})
+		}else {
+			return res.status(401).json({ message: 'Unauthorized'});
+		}
 	} catch (err) { return res.status(500).json({ message: err.message }) }
 });
 
