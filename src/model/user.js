@@ -16,9 +16,8 @@ const userSchema = new mongoose.Schema({
 			minlength: [7, 'Password must be 8 characteres min'],
 			maxlength: [64, 'Password must be 64 characteres min'],
 			trim: true
-		},
-			createdAt: { type: Date, default: Date.now()},
-		})
+		}
+		}, { timestamps: true })
 
 userSchema.plugin(require('mongoose-bcrypt'));
 
