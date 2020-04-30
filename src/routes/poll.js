@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const Poll = require('../model/poll.js');
 const { findPoll } = require('../middleware/findUser.js');
 const { isAuth } = require('../middleware/auth.js');
+const { updateVotes } = require('../utils/updateVotes.js');
 
 router.get('/', async (req, res) => {
 	try {
@@ -31,15 +31,23 @@ router.post('/add', isAuth, async (req, res) => {
 })
 
 router.patch('/vote/:id',isAuth, findPoll, async (req, res) => {
-	
-	console.log(res.username);
-	try {
-		const userVote = res.poll.userVotes.find(vote => vote.id === req.params.id );
-		if (!userVotes) {
-			res.poll.userVotes.push({ id: req.params.id })
-		}
-	}catch (err) { res.status(500).json({ message: err.message })};
-	
+	const answer = req.body.answer.toLowerCase();
+	const userVote = res.poll.userVotes.find(vote => vote.username === res.user.username );
+	if (!userVote){
+		try {
+			const newVote = res.poll.userVotes.push({ username: res.user.username, answer: answer });
+			const saveNewVote = await res.poll.save();
+			const saveUpdateVote = await updateVotes(req.params.id, res.user.username, answer);
+			return res.json(saveUpdateVote);
+		} catch(err) { res.status(500).json({ message: err.message })}
+
+	} if (userVote.answer === answer) return res.status(500).json({ message: `You has voted already `});
+	else {
+		try {
+			const saveUpdateVote = await updateVotes(req.params.id, res.user.username, answer);
+			return res.json(saveUpdateVote);
+		} catch(err) { return res.status(500).json({ message: err.message })}
+	}
 })
 
 router.delete('/:id', isAuth, findPoll, async (req, res) => {

@@ -9,7 +9,7 @@ const isAuth = (req, res, next) => {
 	
 	verify(token, process.env.SECRET, (err, user) => {
 		if (err) return res.status(403).json({ message: err.message })
-		req.user = user;
+		res.user = user;
 		next();
 	})
 }
