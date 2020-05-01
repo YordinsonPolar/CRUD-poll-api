@@ -8,7 +8,6 @@ const { isAuth, createAccessToken } = require('../middleware/auth.js');
 
 router.post('/user/login', async (req, res) => {
 	const { username, password } = req.body;
-	
 	try {
 		const findUser = await User.findOne({ username });
 		if (findUser !== null) {
@@ -24,6 +23,8 @@ router.post('/user/register', async (req,res) => {
 	const { username, password, confirmPassword } = req.body;
 	if (password !== confirmPassword) return res.status(500).json({ password: 'Password not match' })
 	try { 
+		const findUser = await User.findOne({ username });
+		if (findUser) return res.status(500).json({ username: 'User already taken' });
 		const newUser = new User({ username, password });
 		const savedUser = await newUser.save();
 		return res.status(201).json(savedUser);
