@@ -34,7 +34,7 @@ router.post('/user/register', async (req,res) => {
 
 router.delete('/user/:id', findUser, isAuth, async (req, res) => {
 	try {
-		if (res.tokenUser.username === res.user.username) {
+		if (res.authUser.username === res.user.username || res.user.admin) {
 			await res.user.remove();
 			return res.json({ message: 'Deleted user'})
 		}else {

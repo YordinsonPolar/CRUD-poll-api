@@ -8,7 +8,7 @@ const findUser = async (req, res, next) => {
 		if (findUser === null) throw Error('Cannot find user')
 	} catch (err) { return res.status(500).json({ message: err.message }) }
 	
-	res.user = findUser;
+	res.findUser = findUser;
 	next();
 }
 

@@ -9,15 +9,16 @@ const userSchema = new mongoose.Schema({
 		trim: true,
 		unique: true
 	},
-		password: { 
-			type: String,
-			required: true,
-			bcrypt: true,
-			minlength: [7, 'Password must be 8 characteres min'],
-			maxlength: [64, 'Password must be 64 characteres min'],
-			trim: true
-		}
-		}, { timestamps: true })
+	password: { 
+		type: String,
+		required: true,
+		bcrypt: true,
+		minlength: [7, 'Password must be 8 characteres min'],
+		maxlength: [64, 'Password must be 64 characteres min'],
+		trim: true
+	},
+	admin: { type: String, default: false }
+}, { timestamps: true })
 
 userSchema.plugin(require('mongoose-bcrypt'));
 

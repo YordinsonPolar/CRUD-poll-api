@@ -3,6 +3,8 @@ const { findPoll } = require('../middleware/findUser.js');
 const { isAuth } = require('../middleware/auth.js');
 const { updateVotes } = require('../utils/updateVotes.js');
 
+const Poll = require('../model/poll.js');
+
 router.get('/', async (req, res) => {
 	try {
 		const polls = await Poll.find();
@@ -22,12 +24,10 @@ router.patch('/:id', isAuth, findPoll, async (req, res) => {
 
 router.post('/add', isAuth, async (req, res) => {
 	try {
-		const newPoll = new Poll({ ...req.body, votesA: 0, votesB: 0, createdBy: req.user.username});
+		const newPoll = new Poll({ ...req.body, votesA: 0, votesB: 0, createdBy: res.authUser.username});
 		const savePoll = await newPoll.save();
 		return res.json(savePoll);
-	} catch (err) {
-		res.status(500).json({ message: err });
-	}
+	} catch (err) { return res.status(500).json({ message: err.message }) }
 })
 
 router.patch('/vote/:id',isAuth, findPoll, async (req, res) => {
@@ -53,8 +53,10 @@ router.patch('/vote/:id',isAuth, findPoll, async (req, res) => {
 
 router.delete('/:id', isAuth, findPoll, async (req, res) => {
 	try {
-		await res.poll.remove();
-		return res.json({ message: 'Deleted poll'})
+		if (res.authUser.username === res.findUser.username) {
+			await res.poll.remove();
+			return res.json({ message: 'Deleted poll'});
+		}
 	} catch (err) { return res.status(500).json({ message: err.message }) }
 })
 
