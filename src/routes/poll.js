@@ -32,7 +32,7 @@ router.post('/add', isAuth, async (req, res) => {
 
 router.patch('/vote/:id',isAuth, findPoll, async (req, res) => {
 	const answer = req.body.answer.toLowerCase();
-	const { username } = res.tokenUser;
+	const { username } = res.authUser;
 	const userVote = res.poll.userVotes.find(vote => vote.username === username );
 	if (!userVote){
 		try {
@@ -52,11 +52,13 @@ router.patch('/vote/:id',isAuth, findPoll, async (req, res) => {
 })
 
 router.delete('/:id', isAuth, findPoll, async (req, res) => {
+	const { username, admin } = res.authUser;
 	try {
-		if (res.authUser.username === res.findUser.username) {
+		if (username === res.poll.createdBy || admin === true) {
 			await res.poll.remove();
 			return res.json({ message: 'Deleted poll'});
 		}
+		return res.status(401).json({ message: 'Unauthorized'});
 	} catch (err) { return res.status(500).json({ message: err.message }) }
 })
 

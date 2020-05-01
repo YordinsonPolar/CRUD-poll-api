@@ -24,8 +24,6 @@ router.post('/user/register', async (req,res) => {
 	const { username, password, confirmPassword } = req.body;
 	if (password !== confirmPassword) return res.status(500).json({ password: 'Password not match' })
 	try { 
-		const findUser = await User.findOne({ username });
-		if (findUser) return res.status(500).json({ username: 'User already taken' });
 		const newUser = new User({ username, password });
 		const savedUser = await newUser.save();
 		return res.status(201).json(savedUser);
@@ -34,8 +32,8 @@ router.post('/user/register', async (req,res) => {
 
 router.delete('/user/:id', findUser, isAuth, async (req, res) => {
 	try {
-		if (res.authUser.username === res.user.username || res.user.admin) {
-			await res.user.remove();
+		if (res.authUser.username === res.findUser.username || res.authUser.admin === true) {
+			await res.findUser.remove();
 			return res.json({ message: 'Deleted user'})
 		}else {
 			return res.status(401).json({ message: 'Unauthorized'});

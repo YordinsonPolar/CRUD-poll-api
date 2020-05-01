@@ -15,7 +15,7 @@ const isAuth = (req, res, next) => {
 }
 
 const createAccessToken = (user) => {
-	return sign({ username: user.username }, process.env.SECRET, { expiresIn: "4h"});
+	return sign({ username: user.username, admin: user.admin }, process.env.SECRET, { expiresIn: "4h"});
 }
 
 const refreshAccessToken = async (req, res, next) => {
