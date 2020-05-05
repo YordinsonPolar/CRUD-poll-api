@@ -6,6 +6,11 @@ const User = require('../model/user.js');
 const { findUser } = require('../middleware/findUser.js');
 const { isAuth, createAccessToken } = require('../middleware/auth.js');
 
+
+router.get('/user', isAuth, (req, res) => {
+	return res.json({ username: res.authUser.username});
+})
+
 router.post('/user/login', async (req, res) => {
 	const { username, password } = req.body;
 	try {
