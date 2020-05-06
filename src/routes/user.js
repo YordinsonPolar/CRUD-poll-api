@@ -8,7 +8,7 @@ const { isAuth, createAccessToken } = require('../middleware/auth.js');
 
 
 router.get('/user', isAuth, (req, res) => {
-	return res.json({ username: res.authUser.username});
+	return res.json(res.authUser);
 })
 
 router.post('/user/login', async (req, res) => {
