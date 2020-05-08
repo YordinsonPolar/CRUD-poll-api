@@ -32,7 +32,8 @@ router.post('/user/register', async (req,res) => {
 		if (findUser) return res.status(500).json({ username: 'User already taken' });
 		const newUser = new User({ username, password });
 		const savedUser = await newUser.save();
-		return res.status(201).json(savedUser);
+		const accessToken = createAccessToken(savedUser);
+		return res.json({ accessToken });
 	} catch(err) { return res.status(500).json(err); }
 })
 
