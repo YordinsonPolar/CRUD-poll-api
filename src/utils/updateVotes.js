@@ -7,8 +7,8 @@ const updateVotes = async (docId , username, newAnswer, hasVote) => {
 
 	let votes = null;
 	if (hasVote) { 
-		if (newAnswer === 'a') votes = { votesA: votesA + 1, votesB: votesB > 0 ? -1 : 0 };
-		if (newAnswer === 'b') votes = { votesB: votesB + 1, votesA: votesA > 0 ? -1 : 0 };
+		if (newAnswer === 'a') votes = { votesA: votesA + 1, votesB: votesB > 0 ? votesB - 1 : 0 };
+		if (newAnswer === 'b') votes = { votesB: votesB + 1, votesA: votesA > 0 ? votesA - 1 : 0 };
 	}else {
 		if (newAnswer === 'a') votes = { votesA: votesA + 1 };
 		if (newAnswer === 'b') votes = { votesB: votesB + 1 };
