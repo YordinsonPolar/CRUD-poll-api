@@ -13,7 +13,6 @@ const updateVotes = async (docId , username, newAnswer, hasVote) => {
 		if (newAnswer === 'a') votes = { votesA: votesA + 1 };
 		if (newAnswer === 'b') votes = { votesB: votesB + 1 };
 	}
-	console.log(votes)
 	if(!votes) throw Error('Invalid answer');
 	const newVotes = await Poll.findOneAndUpdate({ _id: docId }, { $set: votes }, { new: true });
 	return newVotes;
