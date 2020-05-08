@@ -33,19 +33,19 @@ router.post('/add', isAuth, async (req, res) => {
 router.patch('/vote/:id',isAuth, findPoll, async (req, res) => {
 	const answer = req.body.answer.toLowerCase();
 	const { username } = res.authUser;
-	const userVote = res.poll.userVotes.find(vote => vote.username === username );
-	if (!userVote){
+	const userHasVote = res.poll.userVotes.find(vote => vote.username === username );
+	if (!userHasVote){
 		try {
 			const newVote = res.poll.userVotes.push({ username, answer });
 			const saveNewVote = await res.poll.save();
-			const saveUpdateVote = await updateVotes(req.params.id, username, answer);
+			const saveUpdateVote = await updateVotes(req.params.id, username, answer, false);
 			return res.json(saveUpdateVote);
 		} catch(err) { res.status(500).json({ message: err.message })}
 
-	} if (userVote.answer === answer) return res.status(500).json({ message: `You has voted already `});
+	} if (userHasVote.answer === answer) return res.status(500).json({ message: `You has voted already `});
 	else {
 		try {
-			const saveUpdateVote = await updateVotes(req.params.id, username, answer);
+			const saveUpdateVote = await updateVotes(req.params.id, username, answer, true);
 			return res.json(saveUpdateVote);
 		} catch(err) { return res.status(500).json({ message: err.message })}
 	}
