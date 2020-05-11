@@ -2,14 +2,12 @@ const router = require('express').Router();
 const { findPoll } = require('../middleware/findUser.js');
 const { isAuth } = require('../middleware/auth.js');
 const { updateVotes } = require('../utils/updateVotes.js');
+const { paginatedResults } = require('../middleware/pagination.js');
 
 const Poll = require('../model/poll.js');
 
-router.get('/', async (req, res) => {
-	try {
-		const polls = await Poll.find();
-		return res.json(polls);
-	} catch(err) { res.status(500).json({ message: err.message }) }
+router.get('/', paginatedResults(Poll), async (req, res) => {
+	return res.json(res.paginatedResults);
 })
 
 router.patch('/:id', isAuth, findPoll, async (req, res) => {
