@@ -2,7 +2,7 @@ const paginatedResults = (model) => {
 	return async (req,res,next) => {
 		const page = +req.query.page;
 		const limit = +req.query.limit;
-		const filter = JSON.parse(req.query.filter) || {};
+		const filter = req.query.filter ? JSON.parse(req.query.filter) : {};
 
 
 		const startIndex = (page - 1) * limit;
