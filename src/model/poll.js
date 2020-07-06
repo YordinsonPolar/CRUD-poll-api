@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+ 
 const pollSchema = new mongoose.Schema({
 	question: { type: String, required: true, minlength: [ 7, '7 characteres min'] },
 	answerA: { type: String, required: true, minlength: [ 3, '3 characteres min'] },
