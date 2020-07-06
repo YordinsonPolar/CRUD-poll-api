@@ -25,7 +25,7 @@ router.post('/add', isAuth, async (req, res) => {
 		const newPoll = new Poll({ ...req.body, votesA: 0, votesB: 0, createdBy: res.authUser.username});
 		const savePoll = await newPoll.save();
 		return res.json(savePoll);
-	} catch (err) { return res.status(500).json({ message: err.message }) }
+	} catch (err) { return res.status(500).json({ message: err.errors }) }
 })
 
 router.patch('/vote/:id',isAuth, findPoll, async (req, res) => {

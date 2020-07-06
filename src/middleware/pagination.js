@@ -1,14 +1,16 @@
 const paginatedResults = (model) => {
 	return async (req,res,next) => {
-		const page = parseInt(req.query.page);
-		const limit = parseInt(req.query.limit);
+		const page = +req.query.page;
+		const limit = +req.query.limit;
+		const filter = JSON.parse(req.query.filter) || {};
+
 
 		const startIndex = (page - 1) * limit;
 		const endIndex = page * limit;
 
 		const results = {};
 
-		if (endIndex < model.length) {
+		if (endIndex < await model.countDocuments()) {
 			results.next = { page: page + 1, limit };
 		}
 		if (startIndex > 0) {
@@ -16,11 +18,11 @@ const paginatedResults = (model) => {
 		}
 
 		try {
-			results.results = await model.find().limit(limit).skip(startIndex);
+			results.results = await model.find(filter).limit(limit).skip(startIndex);
 			res.paginatedResults = results;
-			next();
+			return next();
 		}catch(err){
-			res.status(500).json({ message: err.message });
+			return res.status(500).json({ message: err.message });
 		}
 	}
 	
