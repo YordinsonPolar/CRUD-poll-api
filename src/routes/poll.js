@@ -10,12 +10,13 @@ router.get('/', paginatedResults(Poll), async (req, res) => {
 	return res.json(res.paginatedResults);
 })
 
-router.get('/questions', async (req, res) => {
+router.get('/questions/:question', async (req, res) => {
 	try{
-		const getAllquestions = await Poll.find();
+		const filter = { question: { $regex: new RegExp(req.params.question,'i')}};
+		const getAllquestions = await Poll.find(filter);
 		const questions = getAllquestions.map(poll => ({ question: poll.question, _id: poll._id })).sort(new Intl.Collator().compare);
 		return res.json(questions)
-	}catch(err){ return res.statu(500).json({ message: err.message })}
+	}catch(err){ return res.status(500).json({ message: err.message })}
 })
 
 router.get('/poll/:id', async (req, res) => {
