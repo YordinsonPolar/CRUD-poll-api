@@ -10,7 +10,7 @@ router.get('/', paginatedResults(Poll), async (req, res) => {
 	return res.json(res.paginatedResults);
 })
 
-router.get('/:id', paginatedResults(Poll), async (req, res) => {
+router.get('/:id', async (req, res) => {
 	const getPoll = await Poll.find({_id: req.params.id});
 	return res.json(getPoll);
 })
