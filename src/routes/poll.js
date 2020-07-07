@@ -10,6 +10,12 @@ router.get('/', paginatedResults(Poll), async (req, res) => {
 	return res.json(res.paginatedResults);
 })
 
+router.get('/questions', async (req, res) => {
+	const getAllquestions = await Poll.find();
+	const questions = getAllquestions.map(poll => poll.question).sort(new Intl.Collator().compare);
+	return res.json(questions)
+})
+
 router.patch('/:id', isAuth, findPoll, async (req, res) => {
 	let poll = req.body;
 	for( data in poll ) { if (poll[data]) res.poll[data] = poll[data]; }
