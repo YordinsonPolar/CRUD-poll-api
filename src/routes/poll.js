@@ -10,15 +10,20 @@ router.get('/', paginatedResults(Poll), async (req, res) => {
 	return res.json(res.paginatedResults);
 })
 
-router.get('/:id', async (req, res) => {
-	const getPoll = await Poll.find({_id: req.params.id});
-	return res.json(getPoll);
+router.get('/questions', async (req, res) => {
+	try{
+		const getAllquestions = await Poll.find();
+		const questions = getAllquestions.map(poll => ({ question: poll.question, _id: poll._id })).sort(new Intl.Collator().compare);
+		return res.json(questions)
+	}catch(err){ return res.statu(500).json({ message: err.message })}
 })
 
-router.get('/questions', async (req, res) => {
-	const getAllquestions = await Poll.find();
-	const questions = getAllquestions.map(poll => ({ question: poll.question, id : poll._id})).sort(new Intl.Collator().compare);
-	return res.json(questions)
+router.get('/poll/:id', async (req, res) => {
+	try{
+		const getPoll = await Poll.findById({ _id: req.params.id });
+		if (getPoll === null) throw Error('Cannot find Poll');
+		else return res.json(getPoll);
+	}catch(err){ return res.status(500).json({ message: err.message})}
 })
 
 router.patch('/:id', isAuth, findPoll, async (req, res) => {
