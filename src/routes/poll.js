@@ -12,7 +12,7 @@ router.get('/', paginatedResults(Poll), async (req, res) => {
 
 router.get('/questions', async (req, res) => {
 	const getAllquestions = await Poll.find();
-	const questions = getAllquestions.map(poll => poll.question).sort(new Intl.Collator().compare);
+	const questions = getAllquestions.map(poll => ({ question: poll.question, id : poll._id})).sort(new Intl.Collator().compare);
 	return res.json(questions)
 })
 
