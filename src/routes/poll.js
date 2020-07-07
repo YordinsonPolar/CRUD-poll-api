@@ -10,6 +10,11 @@ router.get('/', paginatedResults(Poll), async (req, res) => {
 	return res.json(res.paginatedResults);
 })
 
+router.get('/:id', paginatedResults(Poll), async (req, res) => {
+	const getPoll = await Poll.find({_id: req.params.id});
+	return res.json(getPoll);
+})
+
 router.get('/questions', async (req, res) => {
 	const getAllquestions = await Poll.find();
 	const questions = getAllquestions.map(poll => ({ question: poll.question, id : poll._id})).sort(new Intl.Collator().compare);
