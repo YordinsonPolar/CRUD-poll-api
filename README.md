@@ -1,3 +1,20 @@
 # CRUD-poll-api
 
-Poll REST API made with express and MongoDB
+Poll CRUD API made with express and MongoDB
+
+
+## Features
+
+ User:
+ - Authentication
+ - JSON Web Token
+ 
+ Poll: 
+ - Get All Poll
+ - Get a especific poll
+ - Create a poll
+ - Update a especific poll
+ - Delete a especific poll
+ 
+## Interface Preview:
+https://svelte-poll-app.netlify.app/
