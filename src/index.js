@@ -8,11 +8,17 @@ const db = require('./dataBase.js');
 const { refreshAccessToken } = require('./middleware/auth.js');
 const { isAuth } = require('./middleware/auth.js');
 
+const corsOptions ={
+  origin:'*', 
+  credentials:true, //access-control-allow-credentials:true
+  optionSuccessStatus:200,
+}
+
 // Config
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cookieParser()); 
-app.use(cors({ origin: '*'}));
+app.use(cors(corsOptions));
 
 //routes
 app.use('/', require('./routes/user'))
